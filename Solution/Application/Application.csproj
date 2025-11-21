@@ -10,6 +10,7 @@
       <Folder Include="Command\" />
       <Folder Include="Interface\Command\" />
       <Folder Include="Interface\Query\" />
+      <Folder Include="Mapping\" />
       <Folder Include="Query\" />
     </ItemGroup>
 
