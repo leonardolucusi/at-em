@@ -1,17 +1,17 @@
+using API.Endpoints.Validation;
 using Application.Command.Interface;
 using Application.DTO.Product.Create;
-using Application.ResponseUtility;
 
 namespace API.Endpoints.Product;
 
 internal partial class ProductGroup
 {
-    private static async Task<Response> CreateProduct(
-        ProductCreateDto productCreateDto,
+    private static async Task<IResult> CreateProduct(
         IProductHandler productHandler,
+        ProductCreateDto productCreateDto,
         CancellationToken cancellationToken)
     {
         var response = await productHandler.HandleAdd(productCreateDto, cancellationToken);
-        return response;
+        return Result.From(response, response.Content);
     }
 }
