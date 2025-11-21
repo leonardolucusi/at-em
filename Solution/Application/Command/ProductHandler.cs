@@ -11,7 +11,7 @@ using Infrastructure.UnitOfWork;
 namespace Application.Command;
 
 public class ProductHandler(
-    UnitOfWork unitOfWork,
+    IUnitOfWork unitOfWork,
     IMapper mapper,
     IRepository<Product> productRepository,
     IValidator<ProductCreateDto> productCreateValidator,

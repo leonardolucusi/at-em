@@ -1,4 +1,5 @@
 ﻿using API.Endpoints.Pdf;
+using API.Endpoints.Product;
 
 namespace API
 {
@@ -6,6 +7,7 @@ namespace API
     {
         internal static WebApplication MapEndpoints(this WebApplication app)
         {
+            ProductGroup.Map(app);
             PdfGroup.Map(app);
             return app;
         }
