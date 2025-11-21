@@ -1,5 +1,7 @@
 using API;
+using Application;
 using Application.DI;
+using FluentValidation;
 using Presentation.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,7 +12,8 @@ services
     .AddEndpointsApiExplorer()
     .AddSwaggerGen()
     .AddApplicationDependencyInjection()
-    .AddDatabase();
+    .AddDatabase()
+    .AddValidatorsFromAssemblies(ApplicationLayerAssemblies.GetAssemblies());
 
 var app = builder.Build();
 

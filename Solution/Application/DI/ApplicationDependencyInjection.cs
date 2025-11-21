@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Application.ResponseUtility;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Application.DI
 {
@@ -6,6 +7,8 @@ namespace Application.DI
     {
         public static IServiceCollection AddApplicationDependencyInjection(this  IServiceCollection services)
         {
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddScoped<ValidationResult>();
             return services;
         }
     }

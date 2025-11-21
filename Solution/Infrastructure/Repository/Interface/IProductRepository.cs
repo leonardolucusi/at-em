@@ -1,6 +1,6 @@
 namespace Infrastructure.Repository.Interface;
 
-public interface IMachineRepository
+public interface IProductRepository
 {
     
 }
