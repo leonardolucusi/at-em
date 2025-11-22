@@ -1,4 +1,5 @@
 using Application.DTO.Product.Create;
+using Application.DTO.Product.Update;
 using AutoMapper;
 using Domain.Product;
 
@@ -10,5 +11,8 @@ public class ProductProfile : Profile
     {
         CreateMap<ProductCreateDto, Product>();
         CreateMap<Product, ProductCreatedDto>();
+        
+        CreateMap<ProductUpdateDto, Product>();
+        CreateMap<Product, ProductUpdatedDto>();
     }
 }

@@ -11,7 +11,7 @@ namespace Application.DI
         {
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped<ValidationResult>();
-            services.AddScoped<IProductHandler, ProductHandler>();
+            services.AddScoped<IProductCommandHandler, ProductCommandCommandHandler>();
             
             return services;
         }
