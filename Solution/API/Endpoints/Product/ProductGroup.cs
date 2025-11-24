@@ -15,6 +15,14 @@ internal static partial class ProductGroup
             .WithTags(nameof(ProductGroup))
             .WithSummary(EndpointsRoutes.SummaryBuilder(typeof(ProductGroup), CreateProduct));
         
+        app.MapPost("/api/v1/product/measure", CreateProductWithMeasures)
+            .AllowAnonymous()
+            .Produces<CommonResponse<CommonResultDto>>(StatusCodes.Status201Created)
+            .Produces<CommonResponse<CommonResultDto>>(StatusCodes.Status409Conflict)
+            .Produces<CommonResponse<CommonResultDto>>(StatusCodes.Status422UnprocessableEntity)
+            .WithTags(nameof(ProductGroup))
+            .WithSummary(EndpointsRoutes.SummaryBuilder(typeof(ProductGroup), CreateProductWithMeasures));
+        
         app.MapPut("/api/v1/product", UpdateProduct)
             .AllowAnonymous()
             .Produces<CommonResponse<CommonResultDto>>(StatusCodes.Status201Created)

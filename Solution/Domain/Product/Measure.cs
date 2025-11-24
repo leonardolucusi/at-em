@@ -1,6 +1,8 @@
-﻿namespace Domain.Product
+﻿using Domain.Common;
+
+namespace Domain.Product
 {
-    public class Measure
+    public class Measure : IEntity
     {
         public int Id { get; set; }
         public int ProductId { get; set; }

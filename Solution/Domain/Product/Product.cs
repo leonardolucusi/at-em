@@ -1,4 +1,6 @@
-﻿namespace Domain.Product
+﻿using Domain.Common;
+
+namespace Domain.Product
 {
     public class Product : IEntity
     {
@@ -9,6 +11,6 @@
         public string Manufacturer { get;set; }
         public double SellingPrice { get; set; }
         
-        public virtual ICollection<Measure>? Measures { get; set; }
+        public virtual IEnumerable<Measure>? Measures { get; set; }
     }
 }
