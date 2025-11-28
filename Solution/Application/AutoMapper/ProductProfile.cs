@@ -17,9 +17,12 @@ public class ProductProfile : Profile
         CreateMap<ProductUpdateDto, Product>();
         CreateMap<Product, ProductUpdatedDto>();
         
-        CreateMap<ProductMeasureCreateDto, Product>().ForMember(dest => dest.Measures, opt => opt.Ignore());
-        
-        CreateMap<Product, ProductMeasureCreatedDto>().ForMember(dest => dest.Measures, opt => opt.Ignore());
+        CreateMap<ProductMeasureCreateDto, Product>()
+            .ForMember(dest => dest.Measures, opt => opt.Ignore());
+
+        CreateMap<Product, ProductMeasureCreatedDto>();
         CreateMap<MeasureCreateDto, Measure>();
+
+        CreateMap<Measure, MeasureCreatedDto>();
     }
 }
