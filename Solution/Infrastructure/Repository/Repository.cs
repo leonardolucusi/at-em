@@ -66,6 +66,9 @@ public class Repository<TEntity>(Context context) : IRepository<TEntity>, IDispo
 
     public async Task<TEntity> Delete(TEntity entity, CancellationToken cancellationToken = default) =>
         await Task.Run(() => _dbSet.Remove(entity).Entity, cancellationToken);
+    
+    public async Task DeleteRange(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default) =>
+        await Task.Run(() => _dbSet.RemoveRange(entities), cancellationToken);
 
     public void Dispose()
     {

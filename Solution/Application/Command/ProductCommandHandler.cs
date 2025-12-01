@@ -2,7 +2,9 @@ using Application.Command.Interface;
 using Application.DTO.Measure.Create;
 using Application.DTO.Product.Create;
 using Application.DTO.Product.CreateWithMeasure;
+using Application.DTO.Product.Delete;
 using Application.DTO.Product.Update;
+using Application.DTOs.Validator;
 using Application.Responses.Common;
 using Application.Validation;
 using AutoMapper;
@@ -146,5 +148,29 @@ public class ProductCommandCommandHandler(
             Content = mapper.Map<ProductUpdatedDto>(product),
             ValidationResult = validationResult
         };
+    }
+
+    public async Task<CommonResponse<ProductDeletedDto>> DeleteWithMeasures(int id, CancellationToken cancellationToken = default)
+    {
+        var response = new CommonResponse<ProductDeletedDto>();
+
+        if (!ValidatorExtensions.IsValidId(id, out var productIdErrors))
+        {
+            response.Content = null;
+
+            productIdErrors?.ForEach(x =>
+            {
+                validationResult.Add(ValidationCodes.CodesDictionary[x.ErrorCode], x.ErrorMessage, false);
+                response.ValidationResult = validationResult;
+            });
+
+            return response;
+        }
+
+        await unitOfWork.BeginTransaction(cancellationToken);
+
+        var result = productRepository.DeleteRange();
+        
+        await unitOfWork.CommitTransaction(cancellationToken);
     }
 }

@@ -18,4 +18,5 @@ public interface IRepository<T> where T : class
     );
     public Task Save(CancellationToken cancellationToken = default);
     public Task<T> Delete(T entity, CancellationToken cancellationToken = default);
+    public Task DeleteRange(IEnumerable<T> entities, CancellationToken cancellationToken = default);
 }
