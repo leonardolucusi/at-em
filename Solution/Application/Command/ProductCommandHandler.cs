@@ -171,7 +171,8 @@ public class ProductCommandCommandHandler(
 
         await unitOfWork.BeginTransaction(cancellationToken);
         
-        if ((await productBaseRepository.DeleteById(id, cancellationToken)) == DeleteResult.NotFound)
+        var isProductDeleted = await productBaseRepository.DeleteById(id, cancellationToken);
+        if (isProductDeleted == DeleteResult.NotFound)
         {
             validationResult.Add(ValidationCodes.Code.NotFound, ValidationUtils.InvalidOperation_NotFound(), false);
             response.Content = null;
@@ -179,10 +180,15 @@ public class ProductCommandCommandHandler(
             return response;
         }
         
-        var result = await measureRepository.DeleteMeasuresByProductId(id, cancellationToken);
+        var isMeasuresDeleted = await measureRepository.DeleteMeasuresByProductId(id, cancellationToken);
+        if (isMeasuresDeleted == DeleteResult.NotFound && isProductDeleted == DeleteResult.Deleted){
+            validationResult.Add(ValidationCodes.Code.Ok, ValidationUtils.ValidOperation_Ok(), true);
+            response.Content = null;
+            response.ValidationResult = validationResult;
+            return response;
+        }
         
         await unitOfWork.CommitTransaction(cancellationToken);
-        
         
         validationResult.Add(ValidationCodes.Code.Ok, ValidationUtils.ValidOperation_Ok(), true);
         response.ValidationResult = validationResult;

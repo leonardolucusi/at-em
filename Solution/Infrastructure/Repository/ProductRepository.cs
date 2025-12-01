@@ -10,8 +10,4 @@ public class ProductRepository(Context context) : Repository<Product>(context) ,
     {
         
     }
-    
-        
-    
-    
 }

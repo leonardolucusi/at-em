@@ -12,6 +12,7 @@ public static class InfrastructureDependencyInjection
         services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         services.AddScoped<IProductRepository, ProductRepository>();
+        services.AddScoped<IMeasureRepository, MeasureRepository>();
         
         return services;
     }
