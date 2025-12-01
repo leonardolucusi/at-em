@@ -13,14 +13,16 @@ using Domain.Validations;
 using FluentValidation;
 using Infrastructure.Repository.Interface;
 using Infrastructure.UnitOfWork;
+using Infrastructure.Utility;
 
 namespace Application.Command;
 
 public class ProductCommandCommandHandler(
     IUnitOfWork unitOfWork,
     IMapper mapper,
-    IRepository<Product> productRepository,
-    IRepository<Measure> measureRepository,
+    IRepository<Product> productBaseRepository,
+    IRepository<Measure> measureBaseRepository,
+    IMeasureRepository measureRepository,
     IValidator<ProductCreateDto> productCreateValidator,
     IValidator<ProductUpdateDto> productUpdateValidator,
     IValidator<ProductMeasureCreateDto> productMeasureCreateValidator,
@@ -43,7 +45,7 @@ public class ProductCommandCommandHandler(
 
         await unitOfWork.BeginTransaction(cancellationToken);
 
-        var product = await productRepository.Add(mapper.Map<Product>(productCreateDto), cancellationToken);
+        var product = await productBaseRepository.Add(mapper.Map<Product>(productCreateDto), cancellationToken);
 
         await unitOfWork.CommitTransaction(cancellationToken);
 
@@ -85,8 +87,8 @@ public class ProductCommandCommandHandler(
         }
 
         await unitOfWork.BeginTransaction(cancellationToken);
-        var productEntity = await productRepository.Add(mapper.Map<Product>(dto), cancellationToken);
-        await productRepository.Save(cancellationToken);
+        var productEntity = await productBaseRepository.Add(mapper.Map<Product>(dto), cancellationToken);
+        await productBaseRepository.Save(cancellationToken);
         
         var measures = dto.Measures?.Select(x => new MeasureCreateDto
         {
@@ -97,7 +99,7 @@ public class ProductCommandCommandHandler(
             Weight = x.Weight 
         });
         
-        await measureRepository.AddRange(measures?.Select(mapper.Map<Measure>)!,
+        await measureBaseRepository.AddRange(measures?.Select(mapper.Map<Measure>)!,
             cancellationToken: cancellationToken);
         
         await unitOfWork.CommitTransaction(cancellationToken);
@@ -127,7 +129,7 @@ public class ProductCommandCommandHandler(
 
         await unitOfWork.BeginTransaction(cancellationToken);
 
-        var productEntity = await productRepository.GetById(productUpdateDto.Id, false, cancellationToken);
+        var productEntity = await productBaseRepository.GetById(productUpdateDto.Id, false, cancellationToken);
         if (productEntity is null)
         {
             validationResult.Add(ValidationCodes.Code.NotFound, ValidationUtils.InvalidOperation_NotFound(), false);
@@ -138,7 +140,7 @@ public class ProductCommandCommandHandler(
             };
         }
 
-        var product = await productRepository.Update(mapper.Map<Product>(productUpdateDto), cancellationToken);
+        var product = await productBaseRepository.Update(mapper.Map<Product>(productUpdateDto), cancellationToken);
 
         await unitOfWork.CommitTransaction(cancellationToken);
 
@@ -168,9 +170,22 @@ public class ProductCommandCommandHandler(
         }
 
         await unitOfWork.BeginTransaction(cancellationToken);
-
-        var result = productRepository.DeleteRange();
+        
+        if ((await productBaseRepository.DeleteById(id, cancellationToken)) == DeleteResult.NotFound)
+        {
+            validationResult.Add(ValidationCodes.Code.NotFound, ValidationUtils.InvalidOperation_NotFound(), false);
+            response.Content = null;
+            response.ValidationResult = validationResult;
+            return response;
+        }
+        
+        var result = await measureRepository.DeleteMeasuresByProductId(id, cancellationToken);
         
         await unitOfWork.CommitTransaction(cancellationToken);
+        
+        
+        validationResult.Add(ValidationCodes.Code.Ok, ValidationUtils.ValidOperation_Ok(), true);
+        response.ValidationResult = validationResult;
+        return response;
     }
 }

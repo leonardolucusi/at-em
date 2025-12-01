@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
 using Infrastructure.DataAccess;
 using Infrastructure.Repository.Interface;
+using Infrastructure.Utility;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repository;
@@ -67,8 +68,16 @@ public class Repository<TEntity>(Context context) : IRepository<TEntity>, IDispo
     public async Task<TEntity> Delete(TEntity entity, CancellationToken cancellationToken = default) =>
         await Task.Run(() => _dbSet.Remove(entity).Entity, cancellationToken);
     
-    public async Task DeleteRange(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default) =>
+    public async Task DeleteRange(ICollection<TEntity> entities, CancellationToken cancellationToken = default) =>
         await Task.Run(() => _dbSet.RemoveRange(entities), cancellationToken);
+
+    public async Task<DeleteResult> DeleteById(int id, CancellationToken cancellationToken = default)
+    {
+        var entity = await _dbSet.FindAsync([id], cancellationToken);
+        if (entity is null) return DeleteResult.NotFound;
+        await Delete(entity, cancellationToken);
+        return DeleteResult.Deleted;
+    }
 
     public void Dispose()
     {
