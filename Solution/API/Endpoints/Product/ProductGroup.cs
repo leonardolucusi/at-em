@@ -38,5 +38,13 @@ internal static partial class ProductGroup
             .Produces<CommonResponse<CommonResultDto>>(StatusCodes.Status422UnprocessableEntity)
             .WithTags(nameof(ProductGroup))
             .WithSummary(EndpointsRoutes.SummaryBuilder(typeof(ProductGroup), DeleteProductWithMeasures));
+        
+        app.MapGet("/api/v1/product", GetByIdWithMeasures)
+            .AllowAnonymous()
+            .Produces<CommonResponse<CommonResultDto>>(StatusCodes.Status201Created)
+            .Produces<CommonResponse<CommonResultDto>>(StatusCodes.Status409Conflict)
+            .Produces<CommonResponse<CommonResultDto>>(StatusCodes.Status422UnprocessableEntity)
+            .WithTags(nameof(ProductGroup))
+            .WithSummary(EndpointsRoutes.SummaryBuilder(typeof(ProductGroup), GetByIdWithMeasures));
     }
 }

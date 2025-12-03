@@ -7,9 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Interface\Command\" />
       <Folder Include="Interface\Query\" />
-      <Folder Include="Query\" />
     </ItemGroup>
 
     <ItemGroup>

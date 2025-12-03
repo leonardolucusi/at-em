@@ -3,19 +3,17 @@
 internal static class ValidationUtils
 {
     internal static string ValidOperation_Created(Type type) =>
-        $"Objeto: '{type.Name}' criado com sucesso!";
+        $"Object: '{type.Name}' created successfully!";
     
-    // TODO: Improve OK validation message later on...
     internal static string ValidOperation_Ok() =>
-        "Operação realizada com sucesso!";
+        "Operation successfully completed!";
 
-    // TODO: Improve NoContent validation message later on...
     internal static string ValidOperation_NoContent() =>
-        "Operação realizada com sucesso!";
+        "Operation completed successfully, no content!";
     
     internal static string InvalidOperation_NotFound() =>
-        "Objeto procurado não encontrado!";
+        "Item not found!";
     
     internal static string InvalidOperation_WrongCredentials() =>
-        "Credencial inválida!";
+        "Invalid credential!";
 }
