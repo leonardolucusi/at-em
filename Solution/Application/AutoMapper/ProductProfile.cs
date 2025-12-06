@@ -1,3 +1,4 @@
+using Application.DTO.Measure.Common;
 using Application.DTO.Measure.Create;
 using Application.DTO.Measure.Read;
 using Application.DTO.Product.Create;
@@ -30,5 +31,7 @@ public class ProductProfile : Profile
         CreateMap<Measure, MeasureWithIdDto>();
         
         CreateMap<Measure, MeasureCreatedDto>();
+        CreateMap<MeasureCreateDto, Measure>();
+        CreateMap<Measure, MeasureDto>();
     }
 }

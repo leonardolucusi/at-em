@@ -15,9 +15,9 @@ namespace Application.DI
             services.AddScoped<ValidationResult>();
             
             services.AddScoped<IProductCommandHandler, ProductCommandCommandHandler>();
+            services.AddScoped<IMeasureCommandHandler, MeasureCommandHandler>();
             
             services.AddScoped<IProductQueryHandler, ProductQueryHandler>();
-            
             return services;
         }
     }

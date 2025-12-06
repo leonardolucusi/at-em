@@ -8,8 +8,7 @@ namespace Infrastructure.Repository;
 
 public class MeasureRepository(Context context) : Repository<Measure>(context), IMeasureRepository
 {
-    public async Task<IEnumerable<Measure>> GetMeasuresByProductId(int id,
-        CancellationToken cancellationToken = default) =>
+    public async Task<IEnumerable<Measure>> GetMeasuresByProductId(int id, CancellationToken cancellationToken = default) =>
         await Search(x => x.ProductId == id, true, cancellationToken);
     
     public async Task<DeleteResult> DeleteMeasuresByProductId(int id, CancellationToken cancellationToken = default)

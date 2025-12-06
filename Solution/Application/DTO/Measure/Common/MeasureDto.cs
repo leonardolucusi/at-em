@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Application.DTO.Common;
 using Application.DTO.Measure.Create;
 using FluentValidation;
@@ -7,6 +8,7 @@ namespace Application.DTO.Measure.Common;
 public record MeasureDto : IDto
 {
     public required int ProductId { get; set; }
+    public required int Id { get; set; }
     public required short Height { get; set; }
     public required short Width { get; set; }
     public required short Depth { get; set; }
