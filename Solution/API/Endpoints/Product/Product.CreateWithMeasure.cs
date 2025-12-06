@@ -12,7 +12,7 @@ internal partial class ProductGroup
         IProductCommandHandler productCommandHandler,
         CancellationToken cancellationToken)
     {
-        var result = await productCommandHandler.CreateWithMeasure(productMeasureCreateDto, cancellationToken);
-        return Result.From(result, result.Content);
+        var response = await productCommandHandler.CreateWithMeasure(productMeasureCreateDto, cancellationToken);
+        return Result.From(response, response.Content);
     }
 }

@@ -11,7 +11,7 @@ internal partial class ProductGroup
         ProductUpdateDto productUpdateDto,
         CancellationToken cancellationToken)
     {
-        var result = await productCommandHandler.Update(productUpdateDto, cancellationToken);
-        return Result.From(result, result.Content);
+        var response = await productCommandHandler.Update(productUpdateDto, cancellationToken);
+        return Result.From(response, response.Content);
     }
 }

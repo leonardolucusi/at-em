@@ -9,7 +9,7 @@ internal partial class ProductGroup{
         IProductCommandHandler productCommandHandler,
         CancellationToken cancellationToken)
     {
-        var result = await productCommandHandler.DeleteWithMeasures(id, cancellationToken);
-        return Result.From(result, result.Content);
+        var response = await productCommandHandler.DeleteWithMeasures(id, cancellationToken);
+        return Result.From(response, response.Content);
     }
 }

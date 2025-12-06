@@ -10,7 +10,7 @@ internal partial class ProductGroup
         int id,
         CancellationToken cancellationToken)
     {
-        var result = await productQueryHandler.GetById(id, cancellationToken);
-        return Result.From(result, result.Content);
+        var response = await productQueryHandler.GetById(id, cancellationToken);
+        return Result.From(response, response.Content);
     }
 }
