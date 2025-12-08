@@ -1,5 +1,6 @@
 using Application.Command.Interface;
 using Application.DTO.Measure.Create;
+using Application.DTO.Measure.Update;
 using Application.DTO.Product.Create;
 using Application.DTO.Product.CreateWithMeasure;
 using Application.DTO.Product.Delete;
@@ -112,7 +113,7 @@ public class ProductCommandCommandHandler(
             ValidationResult = validationResult
         };
     }
-
+    
     public async Task<CommonResponse<ProductUpdatedDto>> Update(
         ProductUpdateDto productUpdateDto,
         CancellationToken cancellationToken = default)

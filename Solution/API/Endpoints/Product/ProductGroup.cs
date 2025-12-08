@@ -15,7 +15,7 @@ internal static partial class ProductGroup
             .WithTags(nameof(ProductGroup))
             .WithSummary(EndpointsRoutes.SummaryBuilder(typeof(ProductGroup), CreateProduct));
         
-        app.MapPost("/api/v1/product/full", CreateProductWithMeasures)
+        app.MapPost("/api/v1/product/measures", CreateProductWithMeasures)
             .AllowAnonymous()
             .Produces<CommonResponse<CommonResultDto>>(StatusCodes.Status201Created)
             .Produces<CommonResponse<CommonResultDto>>(StatusCodes.Status409Conflict)
@@ -30,7 +30,7 @@ internal static partial class ProductGroup
             .Produces<CommonResponse<CommonResultDto>>(StatusCodes.Status422UnprocessableEntity)
             .WithTags(nameof(ProductGroup))
             .WithSummary(EndpointsRoutes.SummaryBuilder(typeof(ProductGroup), UpdateProduct));
-        
+                
         app.MapDelete("/api/v1/product", DeleteProductWithMeasures)
             .AllowAnonymous()
             .Produces<CommonResponse<CommonResultDto>>(StatusCodes.Status201Created)
@@ -46,6 +46,15 @@ internal static partial class ProductGroup
             .Produces<CommonResponse<CommonResultDto>>(StatusCodes.Status422UnprocessableEntity)
             .WithTags(nameof(ProductGroup))
             .WithSummary(EndpointsRoutes.SummaryBuilder(typeof(ProductGroup), GetByIdWithMeasures));
+        
+        app.MapPut("/api/v1/product/measure", UpdateMeasure)
+            .AllowAnonymous()
+            .Produces<CommonResponse<CommonResultDto>>(StatusCodes.Status201Created)
+            .Produces<CommonResponse<CommonResultDto>>(StatusCodes.Status409Conflict)
+            .Produces<CommonResponse<CommonResultDto>>(StatusCodes.Status422UnprocessableEntity)
+            .WithTags(nameof(ProductGroup))
+            .WithSummary(EndpointsRoutes.SummaryBuilder(typeof(ProductGroup), UpdateMeasure));
+
         
         app.MapPost("/api/v1/product/measure", CreateMeasure)
             .AllowAnonymous()

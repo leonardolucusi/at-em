@@ -1,6 +1,7 @@
 using Application.Command.Interface;
 using Application.DTO.Measure.Common;
 using Application.DTO.Measure.Create;
+using Application.DTO.Measure.Update;
 using Application.Responses.Common;
 using Application.Validation;
 using AutoMapper;
@@ -15,9 +16,11 @@ namespace Application.Command;
 public class MeasureCommandHandler(
     IMapper mapper,
     IUnitOfWork unitOfWork,
-    IValidator<MeasureCreateDto> measureCreateValidator,
     IRepository<Product> productRepository,
-    IRepository<Measure> measureRepository,
+    IRepository<Measure> measureBaseRepository,
+    IMeasureRepository measureRepository,
+    IValidator<MeasureCreateDto> measureCreateValidator,
+    IValidator<MeasureUpdateDto> measureUpdateValidator,
     ValidationResult validationResult) : IMeasureCommandHandler
 {
     public async Task<CommonResponse<MeasureDto>> Create(MeasureCreateDto dto,
@@ -38,7 +41,7 @@ public class MeasureCommandHandler(
 
         await unitOfWork.BeginTransaction(cancellationToken);
 
-        var measureEntity = await measureRepository.Add(mapper.Map<Measure>(dto), cancellationToken);
+        var measureEntity = await measureBaseRepository.Add(mapper.Map<Measure>(dto), cancellationToken);
 
         await unitOfWork.CommitTransaction(cancellationToken);
 
@@ -50,4 +53,45 @@ public class MeasureCommandHandler(
             ValidationResult = validationResult
         };
     }
+    
+    public async Task<CommonResponse<MeasureUpdatedDto>> UpdateMeasureById(MeasureUpdateDto dto,
+        CancellationToken cancellationToken = default)
+    {
+        validationResult.GetDataFromFluentValidationResult(measureUpdateValidator.Validate(dto));
+        
+        if (validationResult.Validity is false)
+        {
+            return new CommonResponse<MeasureUpdatedDto>
+            {
+                Content = null,
+                ValidationResult = validationResult
+            };
+        }
+        
+        await unitOfWork.BeginTransaction(cancellationToken);
+        
+        var measureEntity = await measureBaseRepository.GetById(dto.Id, false, cancellationToken);
+        
+        if (measureEntity is null)
+        {
+            validationResult.Add(ValidationCodes.Code.NotFound, ValidationUtils.InvalidOperation_NotFound(), false);
+            return new CommonResponse<MeasureUpdatedDto>
+            {
+                Content = null,
+                ValidationResult = validationResult
+            };
+        }
+        
+        await measureBaseRepository.Update(mapper.Map(dto, measureEntity), cancellationToken);
+        
+        await unitOfWork.CommitTransaction(cancellationToken);
+
+        validationResult.Add(ValidationCodes.Code.Ok, ValidationUtils.ValidOperation_Ok(), true);
+        return new CommonResponse<MeasureUpdatedDto>
+        {
+            Content = mapper.Map<MeasureUpdatedDto>(measureEntity),
+            ValidationResult = validationResult
+        };
+    }
+
 }
