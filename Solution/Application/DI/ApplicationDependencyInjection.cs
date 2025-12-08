@@ -18,6 +18,7 @@ namespace Application.DI
             services.AddScoped<IMeasureCommandHandler, MeasureCommandHandler>();
             
             services.AddScoped<IProductQueryHandler, ProductQueryHandler>();
+            services.AddScoped<IMeasureQueryHandler, MeasureQueryHandler>();
             return services;
         }
     }

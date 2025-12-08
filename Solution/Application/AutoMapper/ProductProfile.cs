@@ -36,7 +36,6 @@ public class ProductProfile : Profile
         CreateMap<Measure, MeasureDto>();
 
         CreateMap<MeasureUpdateDto, Measure>();
-        CreateMap<MeasureUpdateWithProductId, Measure>();
         CreateMap<Measure, MeasureUpdatedDto>();
         
     }
