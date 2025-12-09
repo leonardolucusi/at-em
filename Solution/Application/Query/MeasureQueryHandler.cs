@@ -23,11 +23,11 @@ public class MeasureQueryHandler(
     {
         var response = new CommonListResponse<IEnumerable<MeasureDto>>();
 
-        if (!ValidatorExtensions.IsValidId(id, out var productIdErrors))
+        if (!ValidatorExtensions.IsValidId(id, out var measureIdErrors))
         {
             response.Content = null;
 
-            productIdErrors?.ForEach(x =>
+            measureIdErrors?.ForEach(x =>
             {
                 validationResult.Add(ValidationCodes.CodesDictionary[x.ErrorCode], x.ErrorMessage, false);
                 response.ValidationResult = validationResult;

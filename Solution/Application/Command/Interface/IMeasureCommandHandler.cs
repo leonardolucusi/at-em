@@ -1,5 +1,6 @@
 using Application.DTO.Measure.Common;
 using Application.DTO.Measure.Create;
+using Application.DTO.Measure.Delete;
 using Application.DTO.Measure.Update;
 using Application.Responses.Common;
 
@@ -9,5 +10,8 @@ public interface IMeasureCommandHandler
 {
     public Task<CommonResponse<MeasureDto>> Create(MeasureCreateDto dto, CancellationToken cancellationToken = default);
     public Task<CommonResponse<MeasureUpdatedDto>> UpdateMeasureById(MeasureUpdateDto dto,
+        CancellationToken cancellationToken = default);
+
+    public Task<CommonResponse<MeasureDeletedDto>> DeleteById(int id,
         CancellationToken cancellationToken = default);
 }

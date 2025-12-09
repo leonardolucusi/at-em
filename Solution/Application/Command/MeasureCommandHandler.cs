@@ -1,7 +1,9 @@
 using Application.Command.Interface;
 using Application.DTO.Measure.Common;
 using Application.DTO.Measure.Create;
+using Application.DTO.Measure.Delete;
 using Application.DTO.Measure.Update;
+using Application.DTOs.Validator;
 using Application.Responses.Common;
 using Application.Validation;
 using AutoMapper;
@@ -10,6 +12,7 @@ using Domain.Validations;
 using FluentValidation;
 using Infrastructure.Repository.Interface;
 using Infrastructure.UnitOfWork;
+using Infrastructure.Utility;
 
 namespace Application.Command;
 
@@ -92,6 +95,43 @@ public class MeasureCommandHandler(
             Content = mapper.Map<MeasureUpdatedDto>(measureEntity),
             ValidationResult = validationResult
         };
+    }
+
+    public async Task<CommonResponse<MeasureDeletedDto>> DeleteById(int id,
+        CancellationToken cancellationToken = default)
+    {
+        var response = new CommonResponse<MeasureDeletedDto>();
+
+        if (!ValidatorExtensions.IsValidId(id, out var measureIdErrors))
+        {
+            response.Content = null;
+
+            measureIdErrors?.ForEach(x =>
+            {
+                validationResult.Add(ValidationCodes.CodesDictionary[x.ErrorCode], x.ErrorMessage, false);
+                response.ValidationResult = validationResult;
+            });
+
+            return response;
+        }
+
+        await unitOfWork.BeginTransaction(cancellationToken);
+        
+        var measure = await measureBaseRepository.DeleteById(id, cancellationToken);
+
+        if (measure == DeleteResult.NotFound)
+        {
+            validationResult.Add(ValidationCodes.Code.NotFound, ValidationUtils.InvalidOperation_NotFound(), false);
+            response.Content = null;
+            response.ValidationResult = validationResult;
+            return response;
+        }
+        
+        await unitOfWork.CommitTransaction(cancellationToken);
+        
+        validationResult.Add(ValidationCodes.Code.Ok, ValidationUtils.ValidOperation_Ok(), true);
+        response.ValidationResult = validationResult;
+        return response;
     }
 
 }
