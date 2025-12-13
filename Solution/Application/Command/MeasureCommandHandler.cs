@@ -3,7 +3,7 @@ using Application.DTO.Measure.Common;
 using Application.DTO.Measure.Create;
 using Application.DTO.Measure.Delete;
 using Application.DTO.Measure.Update;
-using Application.DTOs.Validator;
+using Application.DTO.Validator;
 using Application.Responses.Common;
 using Application.Validation;
 using AutoMapper;

@@ -1,5 +1,5 @@
 using Application.DTO.Measure.Common;
-using Application.DTOs.Validator;
+using Application.DTO.Validator;
 using Application.Query.Interface;
 using Application.Responses.Common;
 using Application.Validation;

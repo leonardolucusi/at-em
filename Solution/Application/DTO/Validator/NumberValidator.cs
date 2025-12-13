@@ -3,18 +3,18 @@ using FluentValidation;
 
 namespace Application.DTO.Validator;
 
-public class IdValidator : AbstractValidator<int>
+public class NumberValidator : AbstractValidator<int>
 {
-    public IdValidator()
+    public NumberValidator()
     {
         RuleFor(x => x)
             .NotEmpty()
-            .WithMessage($"Id cannot be empty.")
+            .WithMessage($"Number cannot be empty.")
             .WithErrorCode(nameof(ValidationCodes.Code.Required));
         
         RuleFor(x => x)
             .GreaterThan(0)
-            .WithMessage("Id cannot be 0 or negative.")
+            .WithMessage("Number cannot be 0 or negative.")
             .WithErrorCode(nameof(ValidationCodes.Code.LesserThanExpected));
     }
 }

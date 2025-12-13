@@ -1,11 +1,10 @@
 using Application.Command.Interface;
 using Application.DTO.Measure.Create;
-using Application.DTO.Measure.Update;
 using Application.DTO.Product.Create;
 using Application.DTO.Product.CreateWithMeasure;
 using Application.DTO.Product.Delete;
 using Application.DTO.Product.Update;
-using Application.DTOs.Validator;
+using Application.DTO.Validator;
 using Application.Responses.Common;
 using Application.Validation;
 using AutoMapper;
