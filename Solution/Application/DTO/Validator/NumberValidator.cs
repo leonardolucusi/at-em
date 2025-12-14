@@ -8,13 +8,8 @@ public class NumberValidator : AbstractValidator<int>
     public NumberValidator()
     {
         RuleFor(x => x)
-            .NotEmpty()
-            .WithMessage($"Number cannot be empty.")
-            .WithErrorCode(nameof(ValidationCodes.Code.Required));
-        
-        RuleFor(x => x)
-            .GreaterThan(0)
-            .WithMessage("Number cannot be 0 or negative.")
+            .GreaterThan(-1)
+            .WithMessage("Number cannot be negative.")
             .WithErrorCode(nameof(ValidationCodes.Code.LesserThanExpected));
     }
 }

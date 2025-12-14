@@ -28,7 +28,10 @@ public class ProductProfile : Profile
         CreateMap<Product, ProductMeasureCreatedDto>();
         CreateMap<MeasureCreateDto, Measure>();
 
-        CreateMap<Product, ProductWithMeasuresDto>();
+        CreateMap<Product, ProductWithMeasuresDto>().ForMember(
+            dest => dest.MeasuresDto,
+            opt => opt.MapFrom(src => src.Measures)
+        );
         CreateMap<Measure, MeasureWithIdDto>();
         
         CreateMap<Measure, MeasureCreatedDto>();

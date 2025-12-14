@@ -16,50 +16,35 @@ public class ProductQueryHandler(
     IMapper mapper,
     IUnitOfWork unitOfWork,
     IRepository<Product> productBaseRepository,
+    IProductRepository productRepository,
     IMeasureRepository measureRepository,
     ValidationResult validationResult) : IProductQueryHandler
 {
-    public async Task<CommonListResponse<ProductWithMeasuresDto>> GetProductsWithMeasuresPaginated(
+    public async Task<CommonListResponse<IEnumerable<ProductWithMeasuresDto>>> GetProductsWithMeasuresPaginated(
         int pageNumber,
         int pageSize,
         CancellationToken cancellationToken = default)
     {
         var response = new CommonListResponse<ProductWithMeasuresDto>();
 
-        if (!ValidatorExtensions.IsValidNumber(pageNumber, out var productPageNumberErrors))
+        if (!ValidatorExtensions.IsValidNumber(pageNumber, out var productPageNumberErrors) 
+            || !ValidatorExtensions.IsValidNumber(pageSize, out var productPageSizeErrors))
         {
-            response.Content = null;
-
-            productPageNumberErrors?.ForEach(x =>
+            validationResult.Add(ValidationCodes.Code.UnprocessableEntity, ValidationUtils.InvalidOperation_WrongCredentials(), false);
+            return new CommonListResponse<IEnumerable<ProductWithMeasuresDto>>()
             {
-                validationResult.Add(ValidationCodes.CodesDictionary[x.ErrorCode], x.ErrorMessage, false);
-                response.ValidationResult = validationResult;
-            });
-
-            return response;
+                Content = null,
+                ValidationResult = validationResult
+            };
         }
 
-        if (!ValidatorExtensions.IsValidNumber(pageNumber, out var productPageSizeErrors))
+        validationResult.Add(ValidationCodes.Code.Ok, ValidationUtils.ValidOperation_Ok(), true);
+        return new CommonListResponse<IEnumerable<ProductWithMeasuresDto>>()
         {
-            response.Content = null;
-
-            productPageSizeErrors?.ForEach(x =>
-            {
-                validationResult.Add(ValidationCodes.CodesDictionary[x.ErrorCode], x.ErrorMessage, false);
-                response.ValidationResult = validationResult;
-            });
-
-            return response;
-        }
-
-        var products = (await productBaseRepository.GetAll(cancellationToken: cancellationToken))
-            .Skip(pageNumber)
-            .Take(pageSize);
-
-        var r = mapper.Map<IEnumerable<ProductWithMeasuresDto>>(products);
-        r.ToList().ForEach(x => x.MeasuresDto = new List<MeasureWithIdDto>());
-        response.Content = r;
-        return response;
+            Content = (await productRepository.GetProductsWithMeasures(pageSize, pageNumber, cancellationToken))
+                .Select(mapper.Map<ProductWithMeasuresDto>),
+            ValidationResult = validationResult
+        };
     }
 
     public async Task<CommonResponse<ProductWithMeasuresDto>> GetById(int id,
@@ -90,7 +75,6 @@ public class ProductQueryHandler(
                 ValidationResult = validationResult
             };
         }
-
         var measures = await measureRepository.GetMeasuresByProductId(id, cancellationToken);
 
         var productMeasures = mapper.Map<ProductWithMeasuresDto>(product);
