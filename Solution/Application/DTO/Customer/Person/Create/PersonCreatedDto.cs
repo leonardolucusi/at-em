@@ -1,10 +1,9 @@
-using Domain.Common;
-using Domain.Customer.Common;
+using Application.DTO.Common;
 using Domain.Utility;
 
-namespace Domain.Customer;
+namespace Application.DTO.Customer.Person.Create;
 
-public class Person : ICustomer, IEntity
+public record PersonCreatedDto : IDto
 {
     public int Id { get; set; }
     public CustomerType CustomerType { get; set; }
