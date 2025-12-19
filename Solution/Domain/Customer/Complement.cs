@@ -1,7 +1,11 @@
+using Domain.Common;
+
 namespace Domain.Customer;
 
-public class Complement
+public class Complement : IEntity
 {
+    public int Id { get; set; }
+    public int CustomerId { get; set; }
     public string Address { get; set; }
     public string AddressComplement { get; set; }
     public string Country { get; set; }
