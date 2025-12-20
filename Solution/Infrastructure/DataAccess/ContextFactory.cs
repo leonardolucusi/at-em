@@ -23,7 +23,7 @@ public class ContextFactory : IDesignTimeDbContextFactory<Context>
     
     private static IConfigurationRoot GetConfiguration() =>
         new ConfigurationBuilder()
-            .SetBasePath(@$"{Directory.GetParent(Directory.GetCurrentDirectory())}\1. Presentation")
+            .SetBasePath(@$"{Directory.GetParent(Directory.GetCurrentDirectory())}\API")
             .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
             .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json",
                 optional: true, reloadOnChange: true)

@@ -12,4 +12,7 @@ public class Company : ICustomer, IEntity
     public string LegalName { get; set; }
     public string Cnpj { get; set; }
     public string StateRegistration { get; set; }
+    public bool IsActive { get; set; }
+    
+    public virtual IEnumerable<Complement>? Complements { get; set; }
 }

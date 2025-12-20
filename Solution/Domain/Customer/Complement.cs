@@ -16,4 +16,7 @@ public class Complement : IEntity
     public string Cellphone { get; set; }
     public string Email { get; set; }
     public string ContactName { get; set; }
+    public bool IsActive { get; set; }
+    public virtual Person? Person { get; set; }
+    public virtual Company? Company { get; set; }
 }

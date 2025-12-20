@@ -11,4 +11,5 @@ public class Person : ICustomer, IEntity
     public string Name { get; set; }
     public string Cpf { get; set; }
     public string Rg { get; set; }
+    public virtual IEnumerable<Complement>? Complements { get; set; }
 }
