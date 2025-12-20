@@ -20,12 +20,10 @@ namespace Infrastructure.Mapping
                 .IsRequired();
 
             builder.Property(x => x.Description)
-                .HasMaxLength(200)
-                .IsRequired();
+                .HasMaxLength(200);
 
             builder.Property(x => x.Type)
-                .HasMaxLength(30)
-                .IsRequired();
+                .HasMaxLength(30);
 
             builder.Property(x => x.SellingPrice)
                 .HasColumnType("decimal(10,4)")
