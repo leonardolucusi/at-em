@@ -1,4 +1,5 @@
-﻿using API.Endpoints.Pdf;
+﻿using API.Endpoints.Customer;
+using API.Endpoints.Pdf;
 using API.Endpoints.Product;
 
 namespace API
@@ -9,6 +10,7 @@ namespace API
         {
             ProductGroup.Map(app);
             PdfGroup.Map(app);
+            CustomerGroup.Map(app);
             return app;
         }
 

@@ -16,7 +16,7 @@ namespace Application.DI
             
             services.AddScoped<IProductCommandHandler, ProductCommandCommandHandler>();
             services.AddScoped<IMeasureCommandHandler, MeasureCommandHandler>();
-            services.AddScoped<ICustomerCommandHandler, CustomerCommandHandler>();
+            services.AddScoped<IPersonCommandHandler, PersonCommandHandler>();
             
             services.AddScoped<IProductQueryHandler, ProductQueryHandler>();
             services.AddScoped<IMeasureQueryHandler, MeasureQueryHandler>();

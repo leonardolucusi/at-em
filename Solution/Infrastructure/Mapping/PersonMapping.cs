@@ -9,16 +9,7 @@ public class PersonMapping : IEntityTypeConfiguration<Person>
 {
     public void Configure(EntityTypeBuilder<Person> builder)
     {
-        builder.ToTable(DbHelper.TablePerson, DbHelper.SchemaCustomer)
-            .HasKey(x => x.Id);
-        
-        builder.Property(x => x.Id)
-            .ValueGeneratedOnAdd();
-        
-        builder.Property(x => x.CustomerType)
-            .HasConversion<string>()
-            .HasMaxLength(20)
-            .IsRequired();
+        builder.ToTable(DbHelper.TablePerson, DbHelper.SchemaCustomer);
         
         builder.Property(x => x.Name)
             .HasMaxLength(100)
@@ -29,10 +20,5 @@ public class PersonMapping : IEntityTypeConfiguration<Person>
         
         builder.Property(x => x.Rg)
             .HasMaxLength(11);
-
-        builder.HasMany(x => x.Complements)
-            .WithOne(x => x.Person)
-            .HasForeignKey(x => x.CustomerId)
-            .OnDelete(DeleteBehavior.Restrict);
     }
 }

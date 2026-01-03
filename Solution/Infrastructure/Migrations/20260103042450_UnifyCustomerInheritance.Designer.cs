@@ -2,6 +2,7 @@
 using Infrastructure.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20260103042450_UnifyCustomerInheritance")]
+    partial class UnifyCustomerInheritance
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -120,7 +123,9 @@ namespace Infrastructure.Migrations
 
                     b.ToTable("customer", "customer");
 
-                    b.UseTptMappingStrategy();
+                    b.HasDiscriminator<string>("CustomerType");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Domain.Product.Measure", b =>
@@ -215,7 +220,7 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(14)
                         .HasColumnType("character varying(14)");
 
-                    b.ToTable("company", "customer");
+                    b.HasDiscriminator().HasValue("Company");
                 });
 
             modelBuilder.Entity("Domain.Customer.Person", b =>
@@ -237,7 +242,7 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(11)
                         .HasColumnType("character varying(11)");
 
-                    b.ToTable("person", "customer");
+                    b.HasDiscriminator().HasValue("Person");
                 });
 
             modelBuilder.Entity("Domain.Customer.Complement", b =>
@@ -260,24 +265,6 @@ namespace Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("Domain.Customer.Company", b =>
-                {
-                    b.HasOne("Domain.Customer.Customer", null)
-                        .WithOne()
-                        .HasForeignKey("Domain.Customer.Company", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Domain.Customer.Person", b =>
-                {
-                    b.HasOne("Domain.Customer.Customer", null)
-                        .WithOne()
-                        .HasForeignKey("Domain.Customer.Person", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Customer.Customer", b =>

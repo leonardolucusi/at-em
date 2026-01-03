@@ -1,11 +1,11 @@
-using Domain.Common;
+using Application.DTO.Common;
 
-namespace Domain.Customer;
+namespace Application.DTO.Complement.Create;
 
-public class Complement : IEntity
+public record ComplementCreatedDto : IDto
 {
-    public int Id { get; set; }
-    public int CustomerId { get; set; }
+    public string Id { get; set; }
+    public string CustomerId { get; set; }
     public string Address { get; set; }
     public string AddressComplement { get; set; }
     public string District { get; set; }
@@ -19,5 +19,4 @@ public class Complement : IEntity
     public string Email { get; set; }
     public string ContactName { get; set; }
     public bool IsActive { get; set; }
-    public virtual Customer? Customer { get; set; }
 }

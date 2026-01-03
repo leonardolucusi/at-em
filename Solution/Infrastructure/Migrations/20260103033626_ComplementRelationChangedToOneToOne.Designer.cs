@@ -2,6 +2,7 @@
 using Infrastructure.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20260103033626_ComplementRelationChangedToOneToOne")]
+    partial class ComplementRelationChangedToOneToOne
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -20,6 +23,47 @@ namespace Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("Domain.Customer.Company", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Cnpj")
+                        .IsRequired()
+                        .HasMaxLength(14)
+                        .HasColumnType("character varying(14)");
+
+                    b.Property<string>("CustomerType")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<string>("FantasyName")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("character varying(120)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("LegalName")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("character varying(120)");
+
+                    b.Property<string>("StateRegistration")
+                        .IsRequired()
+                        .HasMaxLength(14)
+                        .HasColumnType("character varying(14)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("company", "customer");
+                });
 
             modelBuilder.Entity("Domain.Customer.Complement", b =>
                 {
@@ -103,7 +147,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("complement", "customer");
                 });
 
-            modelBuilder.Entity("Domain.Customer.Customer", b =>
+            modelBuilder.Entity("Domain.Customer.Person", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -111,16 +155,29 @@ namespace Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Cpf")
+                        .IsRequired()
+                        .HasMaxLength(11)
+                        .HasColumnType("character varying(11)");
+
                     b.Property<string>("CustomerType")
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Rg")
+                        .IsRequired()
+                        .HasMaxLength(11)
+                        .HasColumnType("character varying(11)");
+
                     b.HasKey("Id");
 
-                    b.ToTable("customer", "customer");
-
-                    b.UseTptMappingStrategy();
+                    b.ToTable("person", "customer");
                 });
 
             modelBuilder.Entity("Domain.Product.Measure", b =>
@@ -188,67 +245,23 @@ namespace Infrastructure.Migrations
                     b.ToTable("product", "product");
                 });
 
-            modelBuilder.Entity("Domain.Customer.Company", b =>
-                {
-                    b.HasBaseType("Domain.Customer.Customer");
-
-                    b.Property<string>("Cnpj")
-                        .IsRequired()
-                        .HasMaxLength(14)
-                        .HasColumnType("character varying(14)");
-
-                    b.Property<string>("FantasyName")
-                        .IsRequired()
-                        .HasMaxLength(120)
-                        .HasColumnType("character varying(120)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("LegalName")
-                        .IsRequired()
-                        .HasMaxLength(120)
-                        .HasColumnType("character varying(120)");
-
-                    b.Property<string>("StateRegistration")
-                        .IsRequired()
-                        .HasMaxLength(14)
-                        .HasColumnType("character varying(14)");
-
-                    b.ToTable("company", "customer");
-                });
-
-            modelBuilder.Entity("Domain.Customer.Person", b =>
-                {
-                    b.HasBaseType("Domain.Customer.Customer");
-
-                    b.Property<string>("Cpf")
-                        .IsRequired()
-                        .HasMaxLength(11)
-                        .HasColumnType("character varying(11)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<string>("Rg")
-                        .IsRequired()
-                        .HasMaxLength(11)
-                        .HasColumnType("character varying(11)");
-
-                    b.ToTable("person", "customer");
-                });
-
             modelBuilder.Entity("Domain.Customer.Complement", b =>
                 {
-                    b.HasOne("Domain.Customer.Customer", "Customer")
+                    b.HasOne("Domain.Customer.Company", "Company")
                         .WithOne("Complement")
                         .HasForeignKey("Domain.Customer.Complement", "CustomerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Customer");
+                    b.HasOne("Domain.Customer.Person", "Person")
+                        .WithOne("Complement")
+                        .HasForeignKey("Domain.Customer.Complement", "CustomerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Company");
+
+                    b.Navigation("Person");
                 });
 
             modelBuilder.Entity("Domain.Product.Measure", b =>
@@ -264,23 +277,10 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Customer.Company", b =>
                 {
-                    b.HasOne("Domain.Customer.Customer", null)
-                        .WithOne()
-                        .HasForeignKey("Domain.Customer.Company", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Complement");
                 });
 
             modelBuilder.Entity("Domain.Customer.Person", b =>
-                {
-                    b.HasOne("Domain.Customer.Customer", null)
-                        .WithOne()
-                        .HasForeignKey("Domain.Customer.Person", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Domain.Customer.Customer", b =>
                 {
                     b.Navigation("Complement");
                 });

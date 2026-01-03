@@ -8,10 +8,10 @@ partial class CustomerGroup
 {
     private static async Task<IResult> CreateCustomerPerson(
         PersonCreateDto personCreateDto,
-        ICustomerCommandHandler customerCommandHandler,
+        IPersonCommandHandler personCommandHandler,
         CancellationToken cancellationToken)
     {
-        var response = await customerCommandHandler.AddPerson(personCreateDto, cancellationToken);
+        var response = await personCommandHandler.AddPerson(personCreateDto, cancellationToken);
         return Result.From(response, response.Content);
     }
 }

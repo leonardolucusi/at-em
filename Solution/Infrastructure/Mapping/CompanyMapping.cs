@@ -9,16 +9,7 @@ public class CompanyMapping : IEntityTypeConfiguration<Company>
 {
     public void Configure(EntityTypeBuilder<Company> builder)
     {
-        builder.ToTable(DbHelper.TableCompany, DbHelper.SchemaCustomer)
-            .HasKey(x => x.Id);
-        
-        builder.Property(x => x.Id)
-            .ValueGeneratedOnAdd();
-        
-        builder.Property(x => x.CustomerType)
-            .HasConversion<string>()
-            .HasMaxLength(20)
-            .IsRequired();
+        builder.ToTable(DbHelper.TableCompany, DbHelper.SchemaCustomer);
         
         builder.Property(x => x.FantasyName)
             .HasMaxLength(120)
@@ -34,10 +25,5 @@ public class CompanyMapping : IEntityTypeConfiguration<Company>
 
         builder.Property(x => x.StateRegistration)
             .HasMaxLength(14);
-
-        builder.HasMany(x => x.Complements)
-            .WithOne(x => x.Company)
-            .HasForeignKey(x => x.CustomerId)
-            .OnDelete(DeleteBehavior.Restrict);
     }
 }

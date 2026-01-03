@@ -53,15 +53,10 @@ public class ComplementMapping : IEntityTypeConfiguration<Complement>
 
         builder.Property(x => x.IsActive)
             .IsRequired();
-            
-        builder.HasOne(x => x.Person)
-            .WithMany(x => x.Complements)
-            .HasForeignKey(x => x.CustomerId)
-            .OnDelete(DeleteBehavior.Restrict);
-        
-        builder.HasOne(x => x.Company)
-            .WithMany(x => x.Complements)
-            .HasForeignKey(x => x.CustomerId)
+  
+        builder.HasOne(x => x.Customer)
+            .WithOne(x => x.Complement)
+            .HasForeignKey<Complement>(x => x.CustomerId)
             .OnDelete(DeleteBehavior.Restrict);
     }
 }

@@ -9,6 +9,7 @@
         public const string TableMeasure = "measure";
         
         public const string SchemaCustomer = "customer";
+        public const string TableCustomer = "customer";
         public const string TablePerson = "person";
         public const string TableCompany = "company";
         public const string TableComplement = "complement";

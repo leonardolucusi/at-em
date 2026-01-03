@@ -1,15 +1,14 @@
 using Domain.Common;
-using Domain.Customer.Common;
-using Domain.Utility;
 
 namespace Domain.Customer;
 
-public class Person : ICustomer, IEntity
+public class Person : Customer
 {
-    public int Id { get; set; }
-    public CustomerType CustomerType { get; set; }
+    public Person()
+    {
+        CustomerType = Domain.Utility.CustomerType.Person;
+    }
     public string Name { get; set; }
     public string Cpf { get; set; }
     public string Rg { get; set; }
-    public virtual IEnumerable<Complement>? Complements { get; set; }
 }
